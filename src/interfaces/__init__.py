@@ -1,1 +1,1 @@
-from interfaces.geolocation_repository import GeoLocationRepository
+from src.interfaces.geolocation_repository import GeoLocationRepository

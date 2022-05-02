@@ -7,9 +7,11 @@ The enriched data is stored in a GeoJson format at the config file defined locat
 Install the developed package within a new environment
 - `pip install -e ../geolocation_extender`
 
-The package behavior is controlled by a given configuration file as well as the input/ouput files and their location and name.
+The package behavior is controlled by a given configuration file as well as the input/ouput files and their location
+and name. If no value added to the <geolocation_repository> a dummy WebAPI sill be used.
 - `../geolocation_extender/config/program_config.json`
 
-The developed package can be used via a CLI interface:
-- geo_loc_enrichment
+
+The developed package can be run via the following command:
+- `geo_loc_extend`
 

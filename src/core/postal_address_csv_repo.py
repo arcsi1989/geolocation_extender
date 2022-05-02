@@ -7,8 +7,8 @@ import pandas as pd
 from csv import reader
 import multiprocessing as mp
 
-from interfaces.postal_address_repository import PostalAddressRepository
-from common.types import PostalAddress
+from src.interfaces.postal_address_repository import PostalAddressRepository
+from src.common.types import PostalAddress
 
 
 def create_postal_address(data_tuple: Tuple) -> PostalAddress:

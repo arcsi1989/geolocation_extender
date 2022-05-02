@@ -4,12 +4,12 @@ Author: arcsi1989
 from pathlib import Path
 import json
 
-from core import PostalAddressCSVRepository, GeoLocationWebAPI, PostalAddressGeoEnricher, GeoLocationWebAPIDummy
+from src.core import PostalAddressCSVRepository, GeoLocationWebAPI, PostalAddressGeoEnricher, GeoLocationWebAPIDummy
 
 
 def address_enriching_program():
     # Load program specific config file
-    with open((Path(__file__).parent / "config/program_config.json").resolve(), "rb") as file:
+    with open((Path(__file__).parents[1] / "config/program_config.json").resolve(), "rb") as file:
         config = json.load(file)
 
     # Create PostalAddressCSVRepository
