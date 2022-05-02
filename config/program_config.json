@@ -21,7 +21,7 @@
     },
     "linking_keys": {
       "ONRP": ["01", "04"],
-      "STRID": ["04", "06"]
+      "STRID": ["06"]
     },
     "postal_address": {
       "street": "STR_BEZ_K",
@@ -31,7 +31,7 @@
     }
   },
   "geolocation_repository": {
-    "server_url": "http://localhost:5000"
+    "server_url": null
   },
   "output_file": "/Users/aronhorvath/Documents/Study/interview/Avobis/data/geo.json"
 }

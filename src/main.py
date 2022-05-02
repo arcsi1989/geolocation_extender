@@ -16,7 +16,10 @@ def address_enriching_program():
     repository = PostalAddressCSVRepository(config=config["address_repository"])
 
     # Create GeoLocation Repository
-    geo_loc_webapi = GeoLocationWebAPIDummy(config=config['geolocation_repository'])
+    if config['geolocation_repository']['server_url']:
+        geo_loc_webapi = GeoLocationWebAPI(config=config['geolocation_repository'])
+    else:
+        geo_loc_webapi = GeoLocationWebAPIDummy(config=config['geolocation_repository'])
 
     # Create GeoLocation enricher for postal addresses
     postal_address_geo_enricher = PostalAddressGeoEnricher(geo_repo=geo_loc_webapi)
@@ -32,4 +35,3 @@ def address_enriching_program():
 
 if __name__ == '__main__':
     address_enriching_program()
-

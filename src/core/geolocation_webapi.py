@@ -31,19 +31,19 @@ class GeoLocationWebAPI(GeoLocationRepository):
         If the received answer is the corresponding GeoLocation is returned, otherwise a GeoLocation with (0,0)
         coordinates
         """
-        if ~isinstance(postal_address, PostalAddress):
-            warnings.warn(f"Received type: {type(postal_address)} instead of type: PostalAddress")
-            return GeoLocation(0., 0.)
+        if isinstance(postal_address, PostalAddress):
+            message = asdict(postal_address)
+            headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+            response = requests.post(self.server_url, data=json.dumps(message), headers=headers)
 
-        message = asdict(postal_address)
-        headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-        response = requests.post(self.server_url, data=json.dumps(message), headers=headers)
-
-        if response.status_code == 200:
-            return GeoLocation({key: float(value) for key, value in response.json()})
-        elif response.status_code == 400:
-            warnings.warn("Request could not be parsed")
-            return GeoLocation(0., 0.)
+            if response.status_code == 200:
+                return GeoLocation({key: float(value) for key, value in response.json()})
+            elif response.status_code == 400:
+                warnings.warn("Request could not be parsed")
+                return GeoLocation(0., 0.)
+            else:
+                warnings.warn(f"Server response: {response}")
+                return GeoLocation(0., 0.)
         else:
-            warnings.warn(f"Server response: {response}")
+            warnings.warn(f"Received type: {type(postal_address)} instead of type: PostalAddress")
             return GeoLocation(0., 0.)
