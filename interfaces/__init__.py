@@ -1,0 +1,1 @@
+from interfaces.geolocation_repository import GeoLocationRepository

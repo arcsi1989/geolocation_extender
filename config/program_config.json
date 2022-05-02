@@ -1,0 +1,37 @@
+{
+  "address_repository": {
+    "file": "/Users/aronhorvath/Documents/Study/interview/Avobis/data/Post_Adressdaten20170425.csv",
+    "encoding":"ISO-8859-1",
+    "tables": {
+      "01": {
+        "ONRP": 1,
+        "PLZ": 4,
+        "ORT_BEZ_18": 7,
+        "ORT_BEZ_27": 8
+      },
+      "04": {
+        "STRID": 1,
+        "ONRP": 2,
+        "STR_BEZ_K": 3
+      },
+      "06": {
+        "STRID": 2,
+        "HNR": 3
+      }
+    },
+    "linking_keys": {
+      "ONRP": ["01", "04"],
+      "STRID": ["04", "06"]
+    },
+    "postal_address": {
+      "street": "STR_BEZ_K",
+      "street_number": "HNR",
+      "locality": "ORT_BEZ_18",
+      "zipcode": "PLZ"
+    }
+  },
+  "geolocation_repository": {
+    "server_url": "http://localhost:5000"
+  },
+  "output_file": "/Users/aronhorvath/Documents/Study/interview/Avobis/data/geo.json"
+}
