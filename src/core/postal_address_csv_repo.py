@@ -16,12 +16,13 @@ def create_postal_address(data_tuple: Tuple) -> PostalAddress:
     """
     Creates a postal address from data tuple
     Example data tuple:
-        data_tuple[0]: street
+        data_tuple[0]: row number in data_frame - ignore
         data_tuple[1]: street number
-        data_tuple[2]: locality
+        data_tuple[2]: street
         data_tuple[3]: zip code
+        data_tuple[4]: locality
     """
-    if len(data_tuple) == 4:
+    if len(data_tuple) != 5:
         raise ValueError(f"Address information is not complete")
     # Street number
     if np.isnan(data_tuple[1]):
@@ -30,9 +31,9 @@ def create_postal_address(data_tuple: Tuple) -> PostalAddress:
         street_number = int(data_tuple[1])
 
     return PostalAddress(street_number=street_number,
-                         street=data_tuple[0],
+                         street=data_tuple[2],
                          zip=data_tuple[3],
-                         locality=data_tuple[2])
+                         locality=data_tuple[4])
 
 
 class PostalAddressCSVRepository(PostalAddressRepository):
