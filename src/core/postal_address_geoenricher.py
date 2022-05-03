@@ -21,10 +21,12 @@ class PostalAddressGeoEnricher:
 
     def enrich_addresses(self, postal_addresses: List[PostalAddress]):
         """Enriches postal addresses with geo-information using multiprocessing Pools"""
+        print("Log: Start enriching postal addresses with geo-location")
         num_cores = mp.cpu_count()
         with mp.Pool(num_cores - 1) as pool:
             result = pool.imap(self.create_geo_json_address, postal_addresses, chunksize=1000)
             self.geo_json_addresses = [x for x in result]
+        print("Log: Finished postal addresses enrichment")
 
     def create_geo_json_address(self, postal_address):
         """Creates a GeoJson address from the received postal address"""

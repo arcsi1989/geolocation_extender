@@ -132,3 +132,5 @@ dmypy.json
 data
 .idea
 notebooks
+config/data_tables.json
+data

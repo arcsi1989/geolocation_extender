@@ -11,10 +11,8 @@ class PostalAddress:
     """Postal Address"""
     street: str
     street_number: str
-    zip: str  # Validate zip code
+    zip: str
     locality: str
-    # self. = config.get('latitude', 'None')
-    # self.longitude = config.get('longitude', 'None')
 
 
 @dataclass

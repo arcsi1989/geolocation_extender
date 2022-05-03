@@ -4,33 +4,48 @@ Author: arcsi1989
 
 from typing import Dict, Tuple
 import pandas as pd
-from csv import reader
+import numpy as np
 import multiprocessing as mp
 
 from src.interfaces.postal_address_repository import PostalAddressRepository
 from src.common.types import PostalAddress
+from src.utils.preprocess_tables import parse_tables
 
 
 def create_postal_address(data_tuple: Tuple) -> PostalAddress:
-    """Creates a postal address from data tuple"""
+    """
+    Creates a postal address from data tuple
+    Example data tuple:
+        data_tuple[0]: street
+        data_tuple[1]: street number
+        data_tuple[2]: locality
+        data_tuple[3]: zip code
+    """
     if len(data_tuple) == 4:
         raise ValueError(f"Address information is not complete")
-    # TODO validate received tuples values
+    # Street number
+    if np.isnan(data_tuple[1]):
+        street_number = ""
+    else:
+        street_number = int(data_tuple[1])
 
-    return PostalAddress(street_number=data_tuple[0],
-                         street=data_tuple[1],
-                         zip=data_tuple[2],
-                         locality=data_tuple[3])
+    return PostalAddress(street_number=street_number,
+                         street=data_tuple[0],
+                         zip=data_tuple[3],
+                         locality=data_tuple[2])
 
 
 class PostalAddressCSVRepository(PostalAddressRepository):
     """Implements a Postal Address Repository created from 'die Post' csv datasource"""
+
     def __init__(self, config: Dict):
         super().__init__(config=config)
         # TODO sanity check whether exist config parts exists and valid
-        self.filename = self.config['file']
+        self.file_path = self.config['file_path']
+        self.csv_file = self.config['csv_file']
         self.encoding = self.config['encoding']
-        self.tables = self.config['tables']
+        self.tables_config = self.config['tables']
+        self.tables = None
         self.linking_keys = self.config['linking_keys']
         self.postal_address_attributes = self.config['postal_address']
         self._load_csv_file()
@@ -44,54 +59,32 @@ class PostalAddressCSVRepository(PostalAddressRepository):
     def _load_csv_file(self):
         """Loads the addresses into the repository from a csv file"""
 
-        tables_with_requested_data = list(self.tables.keys())
-        extracted_data = {table: list() for table in tables_with_requested_data}
+        # Loading postal addresses
+        self.tables = parse_tables(file_path=self.file_path, csv_file=self.csv_file,
+                                   encoding=self.encoding, tables_config=self.tables_config)
 
-        # Load and extract addresses from CSV file
-        print('Log: CSV loading has been started')
-        with open(self.filename, 'r', encoding=self.encoding) as read_obj:
-            # Pass the file object to reader() to get the reader object
-            csv_reader = reader(read_obj)
-            # Iterate over each row in the csv using reader object
-            for row in csv_reader:
-                # row variable is a list that represents a row in csv
-                row_values = row[0].split(';')
-                # table is the ID of the original tables of database
-                table = row_values[0]
-
-                if table in tables_with_requested_data:
-                    extracted_data[table].append([row_values[i] for i in list(self.tables[table].values())])
-
-        print('Log: CSV loading has been finished')
-        # Create Postal addresses
-        # Create data tables
-        print('Log: Creating data tables has been started')
-        data_tables = dict()
-        for table in tables_with_requested_data:
-            data_tables[table] = pd.DataFrame(data=extracted_data[table],
-                                              columns=list(self.tables[table].keys()))
-
-        # Fuse data_table
+        # Fusing data tables
         print('Log: Fusing data tables has been started')
         fused_tables = None
         for key, tables in self.linking_keys.items():
             if len(tables) == 2:
                 if fused_tables is None:
-                    fused_tables = pd.merge(left=data_tables[tables[0]],
-                                           right=data_tables[tables[1]],
-                                           how='inner', on=key)
+                    fused_tables = pd.merge(left=self.tables[tables[0]],
+                                            right=self.tables[tables[1]],
+                                            how='inner', on=key)
             elif len(tables) == 1:
                 fused_tables = pd.merge(left=fused_tables,
-                                        right=data_tables[tables[0]],
+                                        right=self.tables[tables[0]],
                                         how='inner', on=key)
             else:
                 raise NotImplementedError(f"Method to join more than two tables is not implement")
 
-        print('Log: Creating repository')
-        df = fused_tables[['HNR', 'STR_BEZ_K', 'PLZ', 'ORT_BEZ_18']]
-
+        print('Log: Start to create postal addresses')
+        df = fused_tables[['HNR', 'STRBEZK', 'POSTCODE', 'ORTBEZ18']]
         # Create repository - list of postal addresses"""
         num_cores = mp.cpu_count()
         with mp.Pool(num_cores - 1) as pool:
             result = pool.imap(create_postal_address, df.itertuples(name=None), chunksize=1000)
             self._repository = [x for x in result]
+
+        print('Log: Finished creating postal addresses')

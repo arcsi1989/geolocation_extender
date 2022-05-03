@@ -1,27 +1,137 @@
 {
   "address_repository": {
-    "file": "/Users/aronhorvath/Documents/Study/interview/Avobis/data/Post_Adressdaten20170425.csv",
-    "encoding":"ISO-8859-1",
+    "file_path": "/Users/aronhorvath/gitrepos/geolocation_extender/data",
+    "csv_file": "Post_Adressdaten20170425.csv",
+    "encoding": "ISO-8859-1",
     "tables": {
+      "00": {
+        "table": "NEW_HEA",
+        "fields": {
+          "REC_ART": "int32",
+          "VDAT": "int64",
+          "ZCODE": "int64"
+        }
+      },
       "01": {
-        "ONRP": 1,
-        "PLZ": 4,
-        "ORT_BEZ_18": 7,
-        "ORT_BEZ_27": 8
+        "table": "NEW_PLZ1",
+        "fields": {
+          "REC_ART": "int32",
+          "ONRP": "int64",
+          "BFSNR": "int64",
+          "PLZ_TYP": "int64",
+          "POSTCODE": "int64",
+          "PLZ_ZZ": "string",
+          "GPLZ": "int64",
+          "ORTBEZ18": "string",
+          "ORTBEZ27": "string",
+          "KANTON": "string",
+          "SPRACHCODE": "int64",
+          "SPRACHCODE_ABW": "int64",
+          "BRIEFZ_DURCH": "int64",
+          "GILT_AB_DAT": "stringf",
+          "PLZ_BRIEFZUST": "int64",
+          "PLZ_COFF": "string"
+        }
+      },
+      "02": {
+        "table": "NEW_PLZ2",
+        "fields": {
+          "REC_ART": "int32",
+          "ONRP": "int64",
+          "LAUFNUMMER": "int64",
+          "BEZTYP": "int64",
+          "SPRACHCODE": "int64",
+          "ORTBEZ18": "string",
+          "ORTBEZ27": "string"
+        }
+      },
+      "03": {
+        "table": "NEW_COM",
+        "fields": {
+          "REC_ART": "int32",
+          "BFSNR": "int64",
+          "GEMEINDENAME": "string",
+          "KANTON": "string",
+          "AGGLONR": "int64"
+        }
       },
       "04": {
-        "STRID": 1,
-        "ONRP": 2,
-        "STR_BEZ_K": 3
+        "table": "NEW_STR",
+        "fields": {
+          "REC_ART": "int32",
+          "STRID": "int64",
+          "ONRP": "int64",
+          "STRBEZK": "string",
+          "STRBEZL": "string",
+          "STRBEZ2K": "string",
+          "STRBEZ2L": "string",
+          "STR_LOK_TYP": "int64",
+          "STRBEZ_SPC": "int64",
+          "STRBEZ_COFF": "string",
+          "STR_GANZFACH": "string",
+          "STR_FACH_ONRP": "int64"
+        }
+      },
+      "05": {
+        "table": "NEW_STRA",
+        "fields": {
+          "REC_ART": "int32",
+          "STRID_ALT": "int64",
+          "STRID": "int64",
+          "STRTYP": "int64",
+          "STRBEZAK": "string",
+          "STRBEZAL": "string",
+          "STRBEZA2K": "string",
+          "STRBEZA2L": "string",
+          "STR_LOK_TYP": "int64",
+          "STRBEZ_SPC": "int64"
+        }
       },
       "06": {
-        "STRID": 2,
-        "HNR": 3
+        "table": "NEW_GEB",
+        "fields": {
+          "REC_ART": "int32",
+          "HAUSKEY": "int64",
+          "STRID": "int64",
+          "HNR": "int64",
+          "HNRA": "string",
+          "HNR_COFF": "string",
+          "GANZFACH": "string",
+          "FACH_ONRP": "int64"
+        }
+      },
+      "07": {
+        "table": "NEW_GEBA",
+        "fields": {
+          "REC_ART": "int32",
+          "HAUSKEY_ALT": "int64",
+          "HAUSKEY": "int64",
+          "GEB_BEZ_ALT": "string",
+          "GEBTYP": "int64"
+        }
+      },
+      "08": {
+        "table": "NEW_BOT_B",
+        "fields": {
+          "REC_ART": "int32",
+          "HAUSKEY": "int64",
+          "APLZ": "int64",
+          "BBZ-PLZ": "int64",
+          "BOTENBEZ": "int64",
+          "ETAPPEN-NR": "int64",
+          "LAUF-NR": "int64",
+          "NDEPOT": "string"
+        }
       }
     },
     "linking_keys": {
-      "ONRP": ["01", "04"],
-      "STRID": ["06"]
+      "ONRP": [
+        "01",
+        "04"
+      ],
+      "STRID": [
+        "06"
+      ]
     },
     "postal_address": {
       "street": "STR_BEZ_K",
@@ -33,5 +143,5 @@
   "geolocation_repository": {
     "server_url": null
   },
-  "output_file": "/Users/aronhorvath/Documents/Study/interview/Avobis/data/geo.json"
+  "output_file": "/Users/aronhorvath/gitrepos/geolocation_extender/data/geo.json"
 }

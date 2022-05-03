@@ -37,7 +37,7 @@ class GeoLocationWebAPI(GeoLocationRepository):
             response = requests.post(self.server_url, data=json.dumps(message), headers=headers)
 
             if response.status_code == 200:
-                return GeoLocation({key: float(value) for key, value in response.json()})
+                return GeoLocation(**{key: float(value) for key, value in response.json()})
             elif response.status_code == 400:
                 warnings.warn("Request could not be parsed")
                 return GeoLocation(0., 0.)
