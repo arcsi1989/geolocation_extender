@@ -18,6 +18,7 @@ class GeoLocationWebAPI(GeoLocationRepository):
     The config file constains only:
         server_url (str): location of the WebAPI
     """
+
     def __init__(self, config: Dict):
         super().__init__(config=config)
         # TODO validate config
@@ -32,7 +33,7 @@ class GeoLocationWebAPI(GeoLocationRepository):
         coordinates
         """
         if isinstance(postal_address, PostalAddress):
-            message = asdict(postal_address)
+            message = {key: str(value) for key, value in asdict(postal_address).items()}
             headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
             response = requests.post(self.server_url, data=json.dumps(message), headers=headers)
 

@@ -10,8 +10,8 @@ from dataclasses import dataclass
 class PostalAddress:
     """Postal Address"""
     street: str
-    street_number: str
-    zip: str
+    street_number: int
+    zip: int
     locality: str
 
 
